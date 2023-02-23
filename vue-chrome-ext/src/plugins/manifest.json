@@ -1,0 +1,37 @@
+{
+  "name": "chrome extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "first chrome extension",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "assets/icon64.png"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "icons": {
+    "16": "assets/icon32.png",
+    "48": "assets/icon64.png",
+    "128": "assets/icon128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "css": [
+        "css/popup.css"
+      ],
+      "js": [
+        "js/chunk-vendors.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": []
+}
