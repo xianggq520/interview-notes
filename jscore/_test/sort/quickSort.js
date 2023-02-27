@@ -47,7 +47,7 @@ function quickSort2(arr, left, right) {
 // 分区函数 获取分区元素下标
 function partition(arr, left, right) {
   let pivot = left, // 设定基准值（pivot）
-    index = left;
+    index = left; // 首个比pivot对应的值大的元素的下标
   for (let i = pivot + 1; i <= right; i++) {
     if (arr[i] < arr[pivot]) {
       swap(arr, i, ++index);
@@ -61,6 +61,7 @@ function partition(arr, left, right) {
 
 // 交换函数
 function swap(arr, i, j) {
+  if (i === j) return;
   let temp = arr[i];
   arr[i] = arr[j];
   arr[j] = temp;
