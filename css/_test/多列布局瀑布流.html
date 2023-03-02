@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多列瀑布流布局</title>
+  <style>
+
+    .container {
+      column-count: 5;
+    
+    }
+
+    .inner {
+      /* 避免元素在容器内中断 */
+      break-inside: avoid;
+      height: 200px;
+      margin: 0 10px 10px 0;
+      background-color: yellow;
+      border: 1px solid green;
+    }
+
+    .inner:nth-child(2n) {
+      height: 320px;
+    }
+    .inner:nth-child(3n) {
+      height: 240px;
+    }
+    .inner:nth-child(5n) {
+      height: 360px;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+    <div class="inner"></div>
+  </div>
+</body>
+</html>

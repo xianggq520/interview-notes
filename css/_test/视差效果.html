@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>background-attachment实现视差效果</title>
+  <style>
+    *,
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .imgs-wp {
+      position: absolute;
+      height: 500vh;
+      margin: 0 auto;
+      top: 0;
+      animation: rollup 10s infinite;
+      overflow: hidden;
+    }
+
+    .img-wp {
+      width: 1200px;
+      height: 100vh;
+      margin: 0 auto;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: contain;
+    }
+
+    .one {
+      background-image: url('./assets/1.jpeg');
+    }
+
+    .two {
+      background-image: url('./assets/2.jpeg');
+    }
+
+    .three {
+      background-image: url('./assets/3.jpeg');
+    }
+
+    .four {
+      background-image: url('./assets/4.jpeg');
+    }
+
+    .five {
+      background-image: url('./assets/5.jpeg');
+    }
+
+    @keyframes rollup {
+      0% {
+        top: 0;
+      }
+
+      100% {
+        top: -400vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="imgs-wp">
+    <p class="img-wp one"></p>
+    <p class="img-wp two"></p>
+    <p class="img-wp three"></p>
+    <p class="img-wp four"></p>
+    <p class="img-wp five"></p>
+  </div>
+</body>
+
+</html>

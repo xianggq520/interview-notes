@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>css渐变实现太极图</title>
+  <style>
+    .taiji {
+      position: relative;
+      top: 50vh;
+      transform: translateY(-50%);
+      margin: 0 auto;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: linear-gradient(white 50%, black 50%);
+      display: flex;
+      align-items: center;
+      box-shadow: 0 0 4px 4px #dedede;
+      transform-origin: center;
+      /* animation: rotate 2s infinite linear;
+      animation-name: rotate;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: steps(); */
+      /* paused 暂停 */
+      /* animation-play-state:running;
+      animation-delay: 0s;
+      animation-fill-mode: forwards; */
+    }
+
+    .taiji::before {
+      content: "";
+      display: block;
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      border-radius: 50%;
+      background: radial-gradient(black 20%, white 20%);
+    }
+
+    .taiji::after {
+      content: "";
+      display: block;
+      width: 200px;
+      height: 200px;
+      background-color: green;
+      border-radius: 50%;
+      background: radial-gradient(white 20%, black 20%);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: translateY(-50%) rotateZ(0deg);
+      }
+
+      to {
+        transform: translateY(-50%) rotateZ(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="taiji">
+
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer {
+      display: flex;
+    }
+    .static {
+      position:static;
+      flex: 1;
+      margin-top: 200px;
+      height: 500px;
+      overflow: hidden;
+      border: 1px solid red;
+    }
+    .pr {
+      margin-top: 200px;
+      flex: 1;
+      height: 500px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid red;
+    }
+    .ab{
+      width: 200px;
+      height: 200px;
+      /* 绝对定位 的top/left/right/bottom是相对最近的非static定位元素的相对距离 */
+      position: absolute;
+      top: 200px;
+      background: yellow;
+    }
+ 
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div class="static">
+      <div class="ab"></div>
+    </div>
+    <div class="pr">
+      <div class="ab"></div>
+    </div>
+  </div>
+</body>
+</html>
