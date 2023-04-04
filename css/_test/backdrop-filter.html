@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>background-image + backdrop-filter 实现背景穿透效果</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      height: 200px;
+
+      background-image: radial-gradient(transparent 1px, #fff 1px);
+      background-size: 4px 4px;
+      backdrop-filter: saturate(50%) blur(4px);
+    }
+    .content {
+      height: 200vh;
+      padding: 200px 0 0 0;
+      font-size: 64px;
+      color: #333;
+      /* background-color: green; */
+    }
+  </style>
+</head>
+<body>
+  <div class="header"></div>
+  <div class="content">
+    <p>background-image + backdrop-filter 实现背景穿透效果</p>
+  </div>
+</body>
+</html>

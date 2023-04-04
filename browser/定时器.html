@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+
+  <script>
+
+    const mut = 1.5
+    let time = 1000
+
+    let i = 1
+    const testQueryFn = () => {
+      console.log(`invoke queryFn ${i} time`)
+      return i++ > 4
+    }
+
+    function simplePoller(queryFn = testQueryFn, callback = () => console.log('callback is invoked')) {
+      let start = performance.now()
+      let queryFnResult = false
+      const invokeQueryFn = (timeStamp) => {
+        if (!queryFnResult && (timeStamp - start) < time) {
+          // console.log(timeStamp - start)
+          window.requestAnimationFrame(invokeQueryFn);
+        } else {
+          time *= mut
+          queryFnResult = queryFn()
+          if (queryFnResult) {
+            callback()
+          } else {
+            window.requestAnimationFrame(invokeQueryFn);
+          }
+        }
+      }
+      invokeQueryFn(start)
+    }
+  
+
+  </script>
+</head>
+<body>
+  
+</body>
+</html>

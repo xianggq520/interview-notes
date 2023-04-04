@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas resetTransform</title>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Skewed rectangles
+    ctx.transform(1, 0, 1.7, 1, 0, 0);
+    ctx.fillStyle = "gray";
+    ctx.fillRect(40, 40, 50, 20);
+    ctx.fillRect(40, 90, 50, 20);
+
+    // Non-skewed rectangles
+    ctx.resetTransform();
+    ctx.fillStyle = "red";
+    ctx.fillRect(40, 40, 50, 20);
+    ctx.fillRect(40, 90, 50, 20);
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas自适应物理分辨率</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    // Set display size (css pixels).
+    var size = 200;
+    canvas.style.width = size + "px";
+    canvas.style.height = size + "px";
+
+    // Set actual size in memory (scaled to account for extra pixel density).
+    var scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
+    canvas.width = Math.floor(size * scale);
+    canvas.height = Math.floor(size * scale);
+
+    // Normalize coordinate system to use css pixels.
+
+    // ctx.scale(scale, scale); 相似
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+
+    ctx.fillStyle = "#bada55";
+    ctx.fillRect(20, 20, 170, 170);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = '18px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var x = size / 2;
+    var y = size / 2;
+    var textString = "I love MDN";
+    ctx.fillText(textString, x, y);
+
+    // 类似于ctx.scale(2, 2)
+    // ctx.setTransform(2, 0, 0, 2, 0, 0);
+    // ctx.fillStyle = "red";
+    // ctx.fillRect(5, 5, 85, 85);
+  </script>
+</body>
+</html>

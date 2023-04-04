@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>响应式布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      /* font-size: 62.5%; */
+      /* font-size: 2.666vw; */
+      font-size: 10px;
+    }
+
+    .search-header {
+      display: flex;
+      width: 100%;
+      height: 4.5rem;
+      color: white;
+      border: 0.1rem solid red;
+      box-sizing: border-box;
+      background-color: red;
+      align-items: center;
+    }
+
+    .search-wp {
+      display: flex;
+      flex-grow: 1;
+      height: 3rem;
+      background-color: white;
+      vertical-align: middle;
+      border-radius: 3rem;
+      overflow: hidden;
+      align-items: center;
+    }
+
+    .toggle {
+      width: 5rem;
+      text-align: center;
+    }
+
+    .toggle,
+    .icon,
+    .vline,
+    .login-btn {
+      line-height: 3rem;
+    }
+
+    .icon {
+      width: 2rem;
+      padding: 0 0.5px;
+      font-weight: bold;
+      color: red;
+    }
+
+    .vline {
+      height: 1.8rem;
+      border-left: 1px solid red;
+    }
+
+    input.search {
+      flex: 1;
+      line-height: 4rem;
+      border: none;
+    }
+
+    .login-btn {
+      text-align: center;
+      width: 5rem;
+    }
+  </style>
+  <script>
+    /**
+     * 
+     * 1、设计图尺寸和css尺寸的转换关系
+     * 
+     * 375px / 750px = 1/2
+     * 
+     * css布局尺寸 = ui元素尺寸 * 设备布局尺寸/ui设计图尺寸
+     * 
+     * 2、css尺寸转rem
+     * 
+     * rem = css布局尺寸 / fontSize（html）
+     * 
+     * 3、ui设计图上元素的尺寸和元素在设备上布局尺寸的转换
+     * 
+     * rem = ui元素尺寸 * 设备布局尺寸 / ui设计图尺寸 / fontSize（html）
+     * 
+     * fontSize推荐设置为 10px = 62.5% 或者 100px，方便计算。响应式场景下， 1vw = 3.75px， 10  / 3.75px = 2.6666vw， 100px对应26.666vw
+     * 
+     * eg.
+     * 
+     * 750设计图上一个32px的元素，font-size为 10px， 转换为iphone6设备上的css尺寸为：32 * 375 / 750 / 10 = 1.6rem
+     * 
+     * 动态设置fontSize值的两种方案
+     * 
+     * 1.转换成vw
+     * 10px  / 3.75px = 2.6666vw
+     * 
+     * 2.脚本计算动态设置
+     * window.document.documentElement.clientWidth / 375 * 10 + 'px'
+     **/
+    window.addEventListener('resize', () => {
+      document.documentElement.style.fontSize = window.document.documentElement.clientWidth / 375 * 10 + 'px'
+    })
+  </script>
+  <!-- 都会加载，只是不同分辨率应用了不同的样式 -->
+  <link rel="stylesheet" href="./assets/style320.css" media="screen and (min-width: 320px)">
+  <link rel="stylesheet" href="./assets/style640.css" media="screen and (min-width: 640px)">
+</head>
+<body>
+  <header class="search-header">
+    <span class="toggle">三</span>
+    <span class="search-wp">
+      <span class="icon">JD</span>
+      <span class="vline"></span>
+      <input class="search" type="search" name="" id="">
+    </span>
+    <span class="login-btn">登录</span>
+  </header>
+
+  <div class="container">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+  </div>
+</body>
+
+</html>

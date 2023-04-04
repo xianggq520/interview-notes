@@ -49,3 +49,44 @@ break-inside: avoid;
 # position: relative + top/left/right/bottom
 
 `position:relative`+`top/left/right/bottom`相对自己定位，`position:absolute`相对临近的非static定位的元素。
+
+# letter-spacing 文字间距
+
+# text-indent 首行缩进
+
+# will-change
+
+`will-change`告诉浏览器元素即将发生的变化，浏览器将提前启动优化机制，提升页面的响应速度。
+
+```css
+/* Keyword values */
+will-change: auto;
+will-change: scroll-position;
+will-change: contents;
+will-change: transform; /* Example of <custom-ident> */
+will-change: opacity; /* Example of <custom-ident> */
+will-change: left, top; /* Example of two <animatable-feature> */
+
+```
+
+会消耗额外的性能，因此推荐在需要的时候再开启，避免长时间开启造成的性能消耗。
+
+```js
+
+const el = document.getElementById("element");
+
+// Set will-change when the element is hovered
+el.addEventListener("mouseenter", hintBrowser);
+el.addEventListener("animationEnd", removeHint);
+
+function hintBrowser() {
+  // The optimizable properties that are going to change
+  // in the animation's keyframes block
+  this.style.willChange = "transform, opacity";
+}
+
+function removeHint() {
+  this.style.willChange = "auto";
+}
+
+```

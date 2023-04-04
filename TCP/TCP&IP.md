@@ -13,7 +13,7 @@ Transmission control protocol (TCP) drives reliable data transfers. In contrast,
 传输控制协议 （TCP） 驱动可靠的数据传输。相比之下，用户数据报协议 （UDP） 优先考虑速度和效率，这对互联网运营至关重要。
 
 
-1. TCP 面向连接（message-oriented） UDP面向消息（message-oriented) 无连接connectionless
+1. TCP 面向连接（message-oriented） UDP面向消息（message-oriented） 无连接connectionless
 2. TCP 传输慢，可靠，费带宽，数据包序号错误会重新完成3次握手后再进行数据传输   UDP速度快，但不校验数据传输，会主动丢包
 
    - TCP基于连接发送数据
@@ -29,7 +29,7 @@ Transmission control protocol (TCP) drives reliable data transfers. In contrast,
      - 每一次数据传输，server都会发送一个`ACK`报文，client须回复一个 `ACK+1`的报文，确认数据传输完毕
   
 4. TCP以特定的顺序传输数据，发送的每个数据片段都带有`sequence number`，UDP无顺序，并且会丢弃无法处理的数据包
-5. TCP无法用在多播和广播服务，时理想的面向连接、端对端`point-to-point` 数据传输解决方案
+5. TCP无法用在多播和广播服务，是理想的面向连接、端对端`point-to-point` 数据传输解决方案
 6. TCP有流量控制机制：流量控制是一种机制，服务器通过这种机制首先检查接收方的容量，以了解它可以接受多少数据以及以什么速度接受，当接收方不堪重负时，发送方需要控制数据传输速度。这也意味着服务器将在发送每个数据包之前等待流量控制信息，从而使其速度变慢且效率降低。UDP则直接抛弃接收方无法处理的数据包。
 7. UDP 不控制拥塞，而 TCP 实现拥塞避免算法，TCP会等待拥塞的网络通道畅通后再恢复传输，保证数据包不丢失。
 

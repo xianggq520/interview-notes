@@ -29,3 +29,38 @@ async function getData() {
 // }
 
 getData().then((res) => console.log('@@@', res));
+
+
+/**
+ * 
+ * 如下是一个自动调用generator函数的工具函数 __awaiter
+ * 
+ */
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); } // 关键函数
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+ 
+function promiseGenerator() {
+    return __awaiter(this, void 0, void 0, function* () {
+         
+        const one = yield 1;
+        
+        const two = yield new Error("@@@@@");
+             
+        // 最后一次执行next的返回值
+        return two
+    });
+}
+
+
+/**
+ * 
+ * 实现一个 add(1)(2)(3)(4) = 10
+ */
