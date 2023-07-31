@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "name": "Launch upload app",
+      "program": "${workspaceFolder}/fileupload/app.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    }
+  ]
+}
