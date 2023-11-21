@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <a id="aa" href="./大前端技术栈.png" target="_blank">下载</a>
+  <script>
+    var all = document.getElementsByTagName('a');
+    for (var i = 0; i < all.length; i++) {
+      var a = all[i];
+      if (/png|gpe?g|gif|pdf$/.test(a.href)) {
+        console.log(a.href)
+        a.addEventListener('click', function (e) {
+          e.preventDefault()
+          var elA = document.createElement('a')
+          elA.href = a.href
+          elA.download = a.href.split('/').pop()
+          elA.click()
+        })
+      }
+    }
+    // document.getElementById('aa').addEventListener('click', handle)
+    // function handle(e) {
+    //   console.log('@@@', e)
+    //   e.preventDefault()
+    //   var href = e.target.getAttribute('href')
+    //   console.log(href)
+
+    //   if (!href.endsWith('png')) {
+    //     var a = document.createElement('a')
+    //     a.href = href
+    //     a.click()
+    //     return
+    //   }
+
+    //   var a = document.createElement('a')
+    //   a.href = href
+    //   a.download = '大前端技术栈.png'
+    //   a.click()
+      
+    // }
+  </script>
+</body>
+</html>

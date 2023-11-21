@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    .wp {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="el" class="wp"></div>
+  <button onclick="doAnimation()">animation</button>
+  <script>
+
+    function anni() {
+      const element = document.getElementById("el");
+      let start, previousTimeStamp;
+      let done = false;
+
+      function step(timeStamp) {
+        console.log(timeStamp, '@@@@')
+        if (start === undefined) {
+          start = timeStamp;
+        }
+        const elapsed = timeStamp - start;
+
+        if (previousTimeStamp !== timeStamp) {
+          // Math.min() is used here to make sure the element stops at exactly 200px
+          const count = Math.min(0.1 * elapsed, 200);
+          element.style.transform = `translateX(${count}px)`;
+          if (count === 200) done = true;
+        }
+
+        if (elapsed < 2000) {
+          // Stop the animation after 2 seconds
+          previousTimeStamp = timeStamp;
+          if (!done) {
+            window.requestAnimationFrame(step);
+          }
+        }
+      }
+
+      window.requestAnimationFrame(step);
+    }
+
+    
+    window.onload = function () {
+      // anni();
+    }
+
+    function doAnimation () {
+      anni();
+    }
+
+  </script>
+</body>
+
+</html>
