@@ -54,17 +54,49 @@ sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<- 'EOF'
 {
   "registry-mirrors":[
-  "https://docker.m.daocloud.io",
-  "https://docker.imgdb.de",
-  "https://docker-0.unsee.tech",
-  "https://docker.hlmirror.com",
-  "https://docker.1ms.run",
-  "https://func.ink",
-  "https://lispy.org",
-  "https://docker.xiaogenban1993.com"
+    "https://xxx.mirror.aliyuncs.com"
   ]
 }
 EOF
 # 重启docker服务
 sudo systemctl daemon-reload && sudo systemctl restart docker
+```
+
+## 构建镜像
+
+```sh
+# . 当前目录下
+docker build -t myapp:1.0 .
+
+```
+
+## 本地镜像查询
+
+```sh
+docker images | grep myapp
+```
+
+## 运行镜像
+
+```sh
+# 主机port:镜像port  主机端口->镜像EXPOSE端口
+# Map a host port to a container port (e.g., -p 8080:80 maps host port 8080 to container port 80).
+docker run -p 3000:3000 myapp:1.0
+
+# 查询当前正在运行的容器
+docker ps
+
+# 停止
+docker stop [容器id]
+
+# The command docker-compose up --build -d is used to build, (re)create, and start containers defined in your Docker Compose file in the background
+# up: The primary command to aggregate and start all services defined in your docker-compose.yml.
+# --build: Forces Docker Compose to build or rebuild the images for each service before starting the containers. This is essential if you have updated your Dockerfile or local source code and want those changes reflected in the running environment.
+# -d (Detached mode): Runs the containers in the background, allowing you to continue using the terminal without being attached to the container's logs.
+
+# 批量启动镜像
+docker-compose up --build -d
+
+# 批量停止
+docker compose down
 ```
