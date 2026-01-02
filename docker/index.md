@@ -99,4 +99,11 @@ docker-compose up --build -d
 
 # 批量停止
 docker compose down
+
+# 删除镜像
+# docker rmi id/name:tag
+docker rmi myapp:1.0
+
+# 删除已停止的容器
+docker rm 容器id
 ```
