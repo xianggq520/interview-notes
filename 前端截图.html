@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <img id="abc" src="">
+  <div>这是一段文本这是一段文本这是一段文本这是一段文本这是一段文本这是一段文本这是一段文本</div>
+  <button onclick="shot()">截图</button>
+  <canvas id="canvas"></canvas>
+  <script>
+
+    const displayMediaOptions = {
+      video: {
+        displaySurface: "browser",
+      },
+      audio: {
+        suppressLocalAudioPlayback: false,
+      },
+      preferCurrentTab: false,
+      selfBrowserSurface: "exclude",
+      systemAudio: "include",
+      surfaceSwitching: "include",
+      monitorTypeSurfaces: "include",
+    };
+
+    async function startCapture(displayMediaOptions) {
+      let captureStream;
+
+      try {
+        captureStream =
+          await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+      } catch (err) {
+        console.error(`Error: ${err}`);
+      }
+      return captureStream;
+    }
+
+    async function screentShot() {
+      // const stream = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: 'always'}})
+      const stream = await startCapture(displayMediaOptions)
+
+      const video = document.createElement("video")
+      video.srcObject = stream
+      await video.play()
+
+      // const canvas = document.createElement("canvas")
+      const canvas = document.getElementById("canvas")
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+
+      const context = canvas.getContext("2d")
+      context.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+      const url = canvas.toDataURL()
+
+      console.log(url)
+
+      video.srcObject.getTracks().forEach(track => track.stop());
+      return url
+    }
+
+    async function shot() {
+      const src = await screentShot()
+
+      document.getElementById("abc").src = src
+    }
+  </script>
+</body>
+
+</html>

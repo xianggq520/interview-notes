@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="message-wrap">
+    <ul id="messages"></ul>
+  </div>
+  <div>
+    <button onclick="sendMessage()">send to all</button>
+    <button onclick="sendMessage(1)">send to others</button>
+
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const messages = document.getElementById("messages")
+    const client = io()
+    function sendMessage(toOthers) {
+      if (toOthers === 1) {
+        client.emit("messagetoother", 'hello')
+      } else {
+        client.emit("message", 'hello')
+      }
+    }
+    client.on("message", function (msg) {
+      const li = document.createElement('li')
+      li.textContent = msg
+      messages.appendChild(li)
+    })
+  </script>
+</body>
+
+</html>
