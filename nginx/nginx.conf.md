@@ -1,0 +1,283 @@
+```sh
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+# Basic Settings
+user nginx;
+
+# worker_processes auto;
+# Use 2 worker processes for better performance in multi-core systems
+# Adjust this value based on your server's CPU cores
+worker_processes 2;
+
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+# Events Block
+# See http://nginx.org/en/docs/ngx_core_module.html#events
+events {
+    # Set the maximum number of simultaneous connections that can be opened by a worker process.
+    # 设置每个工作进程可以同时打开的最大连接数。
+    worker_connections 1024;
+}
+
+http {
+    # Log Settings
+    # Define a custom log format named 'main'
+    # 定义名为'main'的自定义日志格式
+    # 'log_format'指令用于定义日志格式
+    # 这里定义的'main'格式包括客户端IP地址、用户标识、时间、
+    # 本地请求、状态码、发送的字节数、引用页、用户代理和X-Forwarded-For头信息
+    # 详细信息请参阅：http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    # Define the location of the access log file and the log format
+    # 定义访问日志文件的位置和日志格式
+    # 'access_log'指令指定了访问日志文件的位置和使用的日志格式
+    # 这里使用了之前定义的'main'日志格式
+    #
+    access_log  /var/log/nginx/access.log  main;
+
+    # Basic Settings
+    # See http://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile
+    # Enable sendfile for efficient file transfers
+    # 启用sendfile以实现高效的文件传输
+    # 'sendfile'指令允许Nginx直接从磁盘发送文件到网络套接字，绕过用户空间
+    # 这提高了性能，特别是在传输大文件时
+    sendfile            on;
+    # Optimize TCP settings for better performance
+    # 优化TCP设置以获得更好的性能
+    # 'tcp_nopush'指令用于在发送文件时优化TCP数据包的传输
+    # 它通过将多个小数据包合并为一个大数据包来减少网络开销
+    # 详细信息请参阅：http://nginx.org/en/docs/http/ngx_http_core_module.html#tcp_nopush
+    tcp_nopush          on;
+    # 'tcp_nodelay'指令禁用Nagle算法，以减少延迟
+    # 这对于需要低延迟的应用程序（如实时通信应用）非常重要
+    tcp_nodelay         on;
+    # Set the maximum size of the client request body
+    # 设置客户端请求体的最大大小
+    # 'client_max_body_size'指令限制客户端请求体的大小
+    # 这有助于防止恶意用户发送过大的请求，从而耗尽服务器资源
+    client_max_body_size 16M;
+    # Set the timeout for keep-alive connections
+    # 设置保持活动连接的超时时间
+    # 'keepalive_timeout'指令定义了服务器在关闭空闲连接之前等待的时间
+    # 这有助于提高性能，因为它允许客户端在多个请求之间重用连接
+    keepalive_timeout   65;
+    # Set the maximum size of the types hash table
+    # 设置类型哈希表的最大大小
+    # 'types_hash_max_size'指令定义了MIME类型哈希表的最大大小
+    # 增加此值可以提高MIME类型查找的性能，特别是在处理大量不同类型的文件时
+    types_hash_max_size 2048;
+
+    # MIME Settings
+    # See http://nginx.org/en/docs/http/ngx_http_core_module.html#types
+    include             /etc/nginx/mime.types;
+    # Set the default MIME type to application/octet-stream
+    # 将默认MIME类型设置为application/octet-stream
+    # This is a generic binary stream type used when the actual type is unknown
+    # 当实际类型未知时，这是一种通用的二进制流类型
+    # It helps prevent security issues by not assuming a specific type
+    # 通过不假设特定类型来帮助防止安全问题
+    # For more information, see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+    # 有关更多信息，请参阅：https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+    # 默认MIME类型设置为application/octet-stream
+    # 这是一种通用的二进制流类型，用于当实际类型未知时
+    # 它有助于防止安全问题，因为不会假设特定类型
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    # Define an upstream block for load balancing Node.js application instances
+    # This block defines a cluster of Node.js servers running on different ports
+    # 用于负载均衡Node.js应用实例的上游块
+    # 该块定义了在不同端口上运行的Node.js服务器集群
+    upstream nodejs_cluster {
+        # Use least connections load balancing method
+        # 使用最少连接负载均衡方法
+        # This method directs traffic to the server with the fewest active connections
+        # 该方法将流量引导到活动连接数最少的服务器
+        # It helps distribute the load more evenly across servers
+        # 它有助于更均匀地分配服务器负载
+        # For more information, see: http://nginx.org/en/docs/http/ngx_http_upstream_module.html#least_conn
+        least_conn;
+        server 127.0.0.1:3000;
+        server 127.0.0.1:3001;
+        server 127.0.0.1:3002;
+    }
+
+    server {
+        # Listen on port 80 for HTTP requests
+        # listen       80 default_server;
+
+        # IPv6 support
+        # listen       [::]:80 default_server;
+
+        # Redirect all HTTP requests to HTTPS
+        listen       80;
+        # listen       [::]:80;
+        server_name  localhost;
+        # Redirect all HTTP requests to HTTPS
+        # 将所有HTTP请求重定向到HTTPS
+        # 'return'指令用于发送HTTP重定向响应
+        # 这里使用301永久重定向将请求从HTTP转发到HTTPS
+        # $host变量包含请求的主机名，$request_uri变量包含请求的URI
+        # 详细信息请参阅：http://nginx.org/en/docs/http/ngx
+        # return 301 https://$host$request_uri;
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    server {
+
+        # Listen on port 443 for HTTPS requests
+        listen 443 ssl;
+        # IPv6 support
+        # listen [::]:443 ssl;
+
+        # Server name (catch-all)
+        # 服务器名称（通配符）
+        # server_name  _;
+        server_name  localhost;
+
+        # SSL Configuration
+        # SSL配置
+        # Path to the self-signed SSL certificate and key files
+        # 自签名SSL证书和密钥文件的路径
+        # These files are used to encrypt traffic between the client and server
+        # 这些文件用于加密客户端和服务器之间的流量
+        # For production environments, use certificates from a trusted Certificate Authority (CA)
+        # 对于生产环境，请使用受信任的证书颁发机构（CA）的证书
+        ssl_certificate     /etc/nginx/certs/nginx-selfsigned.crt;
+        # 自签名SSL密钥文件的路径
+        # 这些文件用于加密客户端和服务器之间的流量
+        # 对于生产环境，请使用受信任的证书颁发机构（CA）的证书
+        ssl_certificate_key /etc/nginx/certs/nginx-selfsigned.key;
+
+        # SSL Settings
+        # SSL设置
+        # Configure SSL session cache and timeout for better performance
+        # 配置SSL会话缓存和超时以获得更好的性能
+        # 'ssl_session_cache'指令启用共享内存区域以缓存SSL会话
+        # 这有助于减少SSL握手的开销，提高性能
+        # 'ssl_session_timeout'指令定义了SSL会话在缓存中保持有效的时间
+        # 这有助于平衡性能和安全性
+        # 详细信息请参阅：http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache
+        # ssl_session_cache   shared:SSL:1m;
+        # ssl_session_timeout  10m;
+
+        # Specify the SSL protocols and ciphers to use
+        # 指定要使用的SSL协议和密码
+        # 'ssl_protocols'指令定义了允许的SSL/TLS协议版本
+        # 这里启用了TLSv1.2和TLSv1.3，这些是当前推荐的安全协议版本
+        # 'ssl_ciphers'指令定义了允许的加密套件
+        # 这里选择了高强度的密码套件，同时排除了不安全的选项
+        # 'ssl_prefer_server_ciphers'指令指示服务器优先选择其配置的密码套件
+        # 这有助于提高安全性
+        # 详细信息请参阅：http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_ciphers
+        # ssl_protocols       TLSv1.2 TLSv1.3;
+        # ssl_ciphers         HIGH:!aNULL:!MD5;
+        # ssl_prefer_server_ciphers on;
+
+        # Document root
+        # 文档根目录
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        # 加载默认服务器块的配置文件。
+        include /etc/nginx/default.d/*.conf;
+
+        # Proxy requests to the Node.js cluster
+        # 将请求代理到Node.js集群
+        # The 'location' directive defines how to process requests for a specific URI
+        # ' / ' indicates the root location, meaning all requests
+        # 'location'指令定义了如何处理特定URI的请求
+        # ' / '表示根位置，意味着所有请求
+        location / {
+            # Forward requests to the Node.js application cluster
+            # 将请求转发到Node.js应用集群
+            # The 'upstream' directive defines a group of backend servers
+            # 'nodejs_cluster' is the name of the upstream block defined earlier
+            # 'proxy_pass'指令将请求转发到上游服务器组
+            # 'nodejs_cluster'是前面定义的上游块的名称
+            proxy_pass http://nodejs_cluster;
+
+            # $proxy_http_version变量指定代理请求使用的HTTP版本
+            # Use HTTP/1.1 for proxying to support WebSocket connections
+            # 使用HTTP/1.1进行代理以支持WebSocket连接
+            # WebSocket协议需要HTTP/1.1，因为它依赖于持久连接和升级机制
+            # proxy_http_version 1.1;
+
+            # Set headers for WebSocket support
+            # 为WebSocket支持设置头信息
+            # 'Upgrade'头指示Nginx在代理请求时升级连接协议
+            # 这对于需要双向通信的应用程序（如实时聊天应用）非常重要
+            # $http_upgrade变量包含客户端请求中的Upgrade头信息
+            # proxy_set_header Upgrade $http_upgrade;
+
+            # Maintain persistent connections for WebSocket support
+            # 为WebSocket支持保持持久连接
+            # 'upgrade'指示Nginx在代理请求时升级连接协议（例如，从HTTP升级到WebSocket）
+            # 这对于需要双向通信的应用程序（如实时聊天应用）非常重要
+            # proxy_set_header Connection 'upgrade';
+
+            # Preserve the original Host header
+            # 保留原始的Host头
+            # $host变量包含客户端请求中的Host头信息
+            # Host头对于后端服务器来说通常很重要，因为它们可能托管多个域名
+            proxy_set_header Host $host;
+
+            # Forward client IP and protocol information
+            # 转发客户端IP和协议信息
+            # These headers help the backend server understand the original request context
+            # 这些头信息有助于后端服务器了解原始请求的上下文
+
+            # Forward the real client IP address
+            # 转发真实的客户端IP地址
+            # $remote_addr变量包含客户端的IP地址
+            # 这对于后端服务器来说通常很重要，因为它们可能需要知道实际的客户端IP地址
+            proxy_set_header X-Real-IP $remote_addr;
+
+            # Forward the X-Forwarded-For header to preserve the original client IP
+            # 转发X-Forwarded-For头以保留原始客户端IP
+            # $proxy_add_x_forwarded_for变量包含现有的X-Forwarded-For头信息，并附加客户端的IP地址
+            # 这对于后端服务器来说通常很重要，因为它们可能需要知道实际的客户端IP地址
+            # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            # Forward the original protocol (HTTP or HTTPS)
+            # 转发原始协议（HTTP或HTTPS）
+            # $scheme变量包含请求使用的协议（http或https）
+            # proxy_set_header X-Forwarded-Proto $scheme;
+
+            # Bypass cache for WebSocket connections
+            # 绕过WebSocket连接的缓存
+            # proxy_cache_bypass $http_upgrade;
+        }
+
+        # Custom error pages
+        # 自定义错误页面
+        # Handle 404 errors
+        # 处理404错误
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+        # Handle 500, 502, 503, and 504 errors
+        # 处理500、502、503和504错误
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+
+}
+
+```
